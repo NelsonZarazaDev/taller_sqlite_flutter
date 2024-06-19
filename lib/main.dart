@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taller_sqlite_flutter/Model/diary.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,17 +56,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  String diaries = "";
 
-  void _incrementCounter() {
+  @override
+  void initState() {
+    getDiaries();
+    super.initState();
+  }
+
+  getDiaries() async {
+    //Consultamos todos los diarios con el Query
+    List diaries = await Diary().getDiaries();
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      //Como tienen el mismo nombre se coloca this
+      this.diaries = diaries.toString();
     });
+
+    //CONSULTAMOS POR ID
+    // Diary diary = await Diary(id:3,type: "Personal", enterCode: "1234").checkEnterCode();
+    //  setState(() {
+    //    this.diaries = diary.toString();
+    //  });
+  }
+
+  Future<void> _incrementCounter() async {
+    //CREAR
+    // Diary diary = Diary(type: "Personal", enterCode: "1234");
+    // int id = await diary.save();
+    // print("id diario $id");
+
+    //Actualizar
+    // Diary diary = Diary(id:4, type: "Personal", enterCode: "1234");
+    // int id = await diary.save();
+    // print("id diario $id");
+    // setState(() {
+    //   diaries;
+    // });
+
+    //ELIMINAR
+    Diary diary = Diary(type: "Personal", enterCode: "1234");
+    await diary.remove();
   }
 
   @override
@@ -109,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '$diaries',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
